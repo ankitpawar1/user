@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import ErrorModal from "./components/UI/ErrorModal.js";
 
 import AddUser from "./components/Users/AddUser.js";
 import UsersList from "./components/Users/UsersList.js";
 
-function App() {
+function App(props) {
   const [usersList, setUsersList] = useState([]);
+  const [userCount, setUserCount] = useState(false);
 
   const addUserHandler = (uName, uAge) => {
     setUsersList((prevUsersList) => {
@@ -14,8 +16,6 @@ function App() {
       ];
     });
   };
-  const count = usersList.length;
-  console.log(count);
 
   const deleteItemHandler = (delId) => {
     setUsersList((prev) => {
@@ -25,15 +25,24 @@ function App() {
       return updatedList;
     });
   };
+  const usercountHandler = () => {
+    setUserCount(true);
+  };
 
   return (
     <>
       <AddUser onAddUser={addUserHandler} />
-      <UsersList
-        users={usersList}
-        userCount={count}
-        onDeleteItem={deleteItemHandler}
-      />
+      <h1>{usersList.length}</h1>
+      {!userCount && usersList.length === 5 ? (
+        <ErrorModal
+          title="data"
+          message="data add 5"
+          onConfirm={usercountHandler}
+        />
+      ) : (
+        ""
+      )}
+      <UsersList users={usersList} onDeleteItem={deleteItemHandler} />
     </>
   );
 }
